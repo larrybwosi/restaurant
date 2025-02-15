@@ -176,7 +176,7 @@ const OrderItemCard: React.FC<OrderItemCardProps> = ({ item, setOrderItems }) =>
       </div>
 
       {/* Expandable Content */}
-      {isExpanded && (
+      {isExpanded && item.options.length > 0 && item.toppings.length > 0 && (
         <div className={cn(
           "mt-4 space-y-4 pt-4 border-t border-gray-200 dark:border-gray-700",
           "transition-all duration-300 ease-in-out overflow-hidden",

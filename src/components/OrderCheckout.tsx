@@ -7,9 +7,7 @@ import PaymentSummary from "./PaymentSummary"
 import Receipt from "./Receipt"
 import { ArrowLeft } from "lucide-react"
 import { OrderItemType } from "@/types/order"
-import { Button } from "./ui/button"
-import { useTheme } from "next-themes"
-
+import { useCart } from "@/lib/context/store"
 
 export default function OrderCheckout () {
   const [orderItems, setOrderItems] = useState<OrderItemType[]>([
@@ -58,10 +56,11 @@ export default function OrderCheckout () {
     },
   ])
 
+    const { items } = useCart()
+
   const [tip, setTip] = useState(15)
   const [showReceipt, setShowReceipt] = useState(false)
   const [paymentMethod, setPaymentMethod] = useState<"card" | "mpesa" | null>(null)
-  const {setTheme, theme} = useTheme()
 
   const calculateItemTotal = (item: OrderItemType): number => {
     let total = item.price * item.quantity
@@ -113,12 +112,6 @@ export default function OrderCheckout () {
       <header className="bg-white dark:bg-gray-800 shadow-sm sticky top-0 z-10 transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
           <div className="flex items-center">
-            <button
-              onClick={() => window.history.back()}
-              className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-200 mr-4 transition-colors duration-200"
-            >
-              <ArrowLeft size={24} />
-            </button>
             <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Customize Your Order</h1>
           </div>
         </div>

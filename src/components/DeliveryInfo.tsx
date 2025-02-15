@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
@@ -23,15 +23,49 @@ import {
 } from "lucide-react"
 
 const DeliveryInfo: React.FC = () => {
-  const [locationType, setLocationType] = useState<"address" | "pin">("address")
-  const [locationDetails, setLocationDetails] = useState("")
-  const [showSuccessAlert, setShowSuccessAlert] = useState(false)
+  const [locationType, setLocationType] = useState<"address" | "pin">("address");
+  const [locationDetails, setLocationDetails] = useState("");
+  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+  const [isGeolocationLoading, setIsGeolocationLoading] = useState(false);
+  const [geolocationError, setGeolocationError] = useState<string | null>(null);
+  const [coordinates, setCoordinates] = useState<{ lat: number, lng: number } | null>(null);
   
   const handleLocationVerify = () => {
-    // Simulate location verification
-    setShowSuccessAlert(true)
-    setTimeout(() => setShowSuccessAlert(false), 3000)
-  }
+    setShowSuccessAlert(true);
+    setTimeout(() => setShowSuccessAlert(false), 3000);
+  };
+
+  const getCurrentLocation = () => {
+    if (!navigator.geolocation) {
+      setGeolocationError("Geolocation is not supported by your browser");
+      return;
+    }
+
+    setIsGeolocationLoading(true);
+    setGeolocationError(null);
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords;
+        setCoordinates({ lat: latitude, lng: longitude });
+        setIsGeolocationLoading(false);
+      },
+      (error) => {
+        setIsGeolocationLoading(false);
+        setGeolocationError(
+          error.PERMISSION_DENIED 
+            ? "Please enable location permissions in your browser settings"
+            : "Unable to retrieve your location"
+        );
+      }
+    );
+  };
+
+  useEffect(() => {
+    if (locationType === "address") {
+      setGeolocationError(null);
+    }
+  }, [locationType]);
 
   return (
     <Card className="bg-white dark:bg-gray-800 rounded-xl shadow-lg transition-all duration-300 hover:shadow-xl border border-gray-100 dark:border-gray-700">
@@ -149,23 +183,42 @@ const DeliveryInfo: React.FC = () => {
                 onChange={(e) => setLocationDetails(e.target.value)}
               />
             </TabsContent>
-            
+
             <TabsContent value="pin" className="space-y-3">
               <div className="bg-gray-100 dark:bg-gray-700 rounded-lg text-center p-4 h-[200px] flex flex-col items-center justify-center border border-dashed border-gray-300 dark:border-gray-600">
                 <MapPin size={32} className="text-indigo-500 mb-2" />
-                <p className="text-sm text-gray-600 dark:text-gray-300">
-                  Interactive map would be displayed here
-                </p>
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  className="mt-2 text-indigo-600 border-indigo-300 hover:bg-indigo-50"
-                >
-                  <Navigation size={14} className="mr-1" />
-                  Use Current Location
-                </Button>
+                {coordinates ? (
+                  <div className="space-y-2">
+                    <p className="text-sm text-gray-600 dark:text-gray-300">
+                      Location captured: {coordinates.lat.toFixed(4)}, {coordinates.lng.toFixed(4)}
+                    </p>
+                  </div>
+                ) : (
+                  <>
+                    <p className="text-sm text-gray-600 dark:text-gray-300">
+                      {isGeolocationLoading ? "Getting your location..." : "Click below to pin your location"}
+                    </p>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="mt-2 text-indigo-600 border-indigo-300 hover:bg-indigo-50"
+                      onClick={getCurrentLocation}
+                      disabled={isGeolocationLoading}
+                    >
+                      <Navigation size={14} className="mr-1" />
+                      {isGeolocationLoading ? "Locating..." : "Use Current Location"}
+                    </Button>
+                  </>
+                )}
               </div>
-              
+
+              {geolocationError && (
+                <Alert variant="destructive" className="mt-2">
+                  <Info className="h-4 w-4 mr-2" />
+                  <AlertDescription>{geolocationError}</AlertDescription>
+                </Alert>
+              )}
+
               <Textarea 
                 placeholder="Add details to help the driver find you (building name, landmarks, etc.)"
                 className="resize-none border-gray-200 dark:border-gray-700 focus:border-indigo-500 dark:focus:border-indigo-400 min-h-[80px]"

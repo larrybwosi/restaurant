@@ -22,6 +22,7 @@ export interface OrderItemType {
   options: OrderItemOption[]
   toppings: OrderItemTopping[]
   specialInstructions: string
+  category?: string;
 }
 
 export function calculateItemTotal(item: OrderItemType): number {

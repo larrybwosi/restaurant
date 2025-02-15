@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Menu, X, Clock, Phone, MapPin, ArrowRight, ChefHat, Truck, Star, Instagram, Facebook, Twitter } from 'lucide-react';
 
 const LandingPage = () => {
@@ -50,7 +50,7 @@ const LandingPage = () => {
             {/* Desktop Menu */}
             <div className="hidden md:flex items-center space-x-8">
               <a href="#home" className={`${isScrolled ? 'text-slate-600' : 'text-white'} hover:text-amber-500 transition-colors duration-300`}>Home</a>
-              <a href="#menu" className={`${isScrolled ? 'text-slate-600' : 'text-white'} hover:text-amber-500 transition-colors duration-300`}>Menu</a>
+              <a href="/dishes" className={`${isScrolled ? 'text-slate-600' : 'text-white'} hover:text-amber-500 transition-colors duration-300`}>Menu</a>
               <a href="#specials" className={`${isScrolled ? 'text-slate-600' : 'text-white'} hover:text-amber-500 transition-colors duration-300`}>Specials</a>
               <a href="#delivery" className={`${isScrolled ? 'text-slate-600' : 'text-white'} hover:text-amber-500 transition-colors duration-300`}>Delivery</a>
               <button className="bg-amber-500 text-white px-6 py-3 rounded-full hover:bg-amber-600 transition-all duration-300 transform hover:scale-105">
