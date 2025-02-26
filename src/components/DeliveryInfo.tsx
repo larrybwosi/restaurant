@@ -10,7 +10,6 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { 
-  Clock, 
   MapPin, 
   User, 
   Phone, 
@@ -109,7 +108,7 @@ const DeliveryInfo: React.FC = () => {
               <Phone className="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
             </div>
             <p className="text-xs text-gray-500 dark:text-gray-400 ml-1">
-              We'll send delivery updates to this number
+              We&apos;ll send delivery updates to this number
             </p>
           </div>
         </div>

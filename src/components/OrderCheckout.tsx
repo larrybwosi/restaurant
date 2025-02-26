@@ -5,11 +5,11 @@ import OrderSummary from "./OrderSummary"
 import DeliveryInfo from "./DeliveryInfo"
 import PaymentSummary from "./PaymentSummary"
 import Receipt from "./Receipt"
-import { ArrowLeft } from "lucide-react"
 import { OrderItemType } from "@/types/order"
 import { useCart } from "@/lib/context/store"
+import { observer, useObservable } from '@legendapp/state/react';
 
-export default function OrderCheckout () {
+function OrderCheckout () {
   const [orderItems, setOrderItems] = useState<OrderItemType[]>([
     {
       id: 1,
@@ -57,6 +57,7 @@ export default function OrderCheckout () {
   ])
 
     const { items } = useCart()
+    console.log(items)
 
   const [tip, setTip] = useState(15)
   const [showReceipt, setShowReceipt] = useState(false)
@@ -147,3 +148,5 @@ export default function OrderCheckout () {
 }
 
 
+
+export default observer(OrderCheckout)
